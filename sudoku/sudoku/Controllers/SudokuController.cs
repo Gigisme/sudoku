@@ -6,8 +6,21 @@ namespace sudoku.Controllers;
 public class SudokuController : Controller
 {
     [HttpGet("generate")]
-    public IActionResult Generate()
+    public IActionResult Generate([FromQuery] int difficulty = 1)
     {
-        return Ok("Generated");
+        var generator = new Services.SudokuGenerator();
+        var board = generator.Construct().RemoveNumbers(difficulty).GetBoard();
+        
+        //Turning the board into a string
+        string boardString = "";
+        for (int i = 0; i < 9; i++)
+        {
+            for (int j = 0; j < 9; j++)
+            {
+                    boardString += board[i, j].ToString();
+            }
+        }
+        
+        return Ok(boardString);
     }
 }
